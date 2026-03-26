@@ -1,0 +1,40 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python3 -m bg_remover.src.data.dataset
+    deps:
+    - path: bg_remover/src/data/dataset.py
+      hash: md5
+      md5: f4246ca28d505831db7123c8c59a4f8b
+      size: 244
+      isexec: true
+    outs:
+    - path: bg_remover/data/raw/people_segmentation
+      hash: md5
+      md5: dcafaa18fecada973c7ac661a6ed3556.dir
+      size: 489209570
+      nfiles: 11360
+  preprocessing:
+    cmd: python3 -m bg_remover.src.data.preprocess_data
+    deps:
+    - path: bg_remover/data/raw/people_segmentation
+      hash: md5
+      md5: dcafaa18fecada973c7ac661a6ed3556.dir
+      size: 489209570
+      nfiles: 11360
+    - path: bg_remover/src/data/preprocess_data.py
+      hash: md5
+      md5: 03a0ec99856337bcbfd6084793a1a217
+      size: 3052
+      isexec: true
+    outs:
+    - path: bg_remover/data/processed/test
+      hash: md5
+      md5: 17ed69f6f1818764acef2bbd8690605f.dir
+      size: 231538628
+      nfiles: 1136
+    - path: bg_remover/data/processed/train
+      hash: md5
+      md5: 66f8e1a35cc79e731863e6e73fe88df0.dir
+      size: 10865076264
+      nfiles: 61320

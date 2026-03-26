@@ -1,0 +1,26 @@
+stages:
+  data_ingestion:
+    cmd: python3 -m bg_remover.src.data.dataset
+    deps:
+      - bg_remover/src/data/dataset.py
+    outs:
+      - bg_remover/data/raw/people_segmentation
+  preprocessing:
+    cmd: python3 -m bg_remover.src.data.preprocess_data
+    deps:
+      - bg_remover/src/data/preprocess_data.py
+      - bg_remover/data/raw/people_segmentation
+    outs:
+      - bg_remover/data/processed/train
+      - bg_remover/data/processed/test
+  train:
+    cmd: python3 -m bg_remover.scripts.train
+    deps:
+      - bg_remover/scripts/train.py
+      - bg_remover/data/processed/train
+      - bg_remover/data/processed/test
+    outs:
+      -  /teamspace/studios/this_studio/bg_remover/artifacts/model/my_model
+
+
+
