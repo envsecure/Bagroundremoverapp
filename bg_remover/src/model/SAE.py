@@ -1,15 +1,20 @@
-import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+import torch
+import torch.nn as nn
 
-from tensorflow.keras.layers import  GlobalAveragePooling2D
-from tensorflow.keras.layers import Dense,Reshape,Multiply
 
-def SqueezeAndExcite(inputs,ratio=8):
-    b,_,_,channel=inputs.shape
-    se_shape = (1, 1, channel)
-    x=GlobalAveragePooling2D()(inputs)
-    se = Reshape(se_shape)(x)
-    dep1=Dense(channel//ratio,activation="relu",use_bias=False)(se)
-    dep2=Dense(channel,activation="sigmoid",use_bias=False)(dep1)
-    ans=Multiply()([inputs,dep2])
-    return ans
+class SqueezeAndExcite(nn.Module):
+    def __init__(self, channels, ratio=8):
+        super().__init__()
+        self.fc1 = nn.Linear(channels, channels // ratio, bias=False)
+        self.fc2 = nn.Linear(channels // ratio, channels, bias=False)
+
+    def forward(self, x):
+        b, c, _, _ = x.shape
+        # Global Average Pooling → (B, C)
+        se = x.mean(dim=[2, 3])
+        # FC → ReLU → FC → Sigmoid
+        se = torch.relu(self.fc1(se))
+        se = torch.sigmoid(self.fc2(se))
+        # Reshape to (B, C, 1, 1) and scale
+        se = se.view(b, c, 1, 1)
+        return x * se
