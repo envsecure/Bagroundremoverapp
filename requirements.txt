@@ -1,4 +1,12 @@
-kagglehub
+tqdm
+fastapi
+uvicorn[standard]
+python-multipart
+pyyaml
+opencv-python-headless
+numpy
+scikit-learn
 albumentations
-opencv-python
-tensorflow
+kagglehub
+dvc
+dagshub

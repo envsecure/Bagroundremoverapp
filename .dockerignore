@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+.git
+.dvc/cache
+.idea
+.vscode
+.cursor-server
+.vscode-server
+.windsurf-server
+bg_remover/data/
+frontend/node_modules
+frontend/.vite
+*.env
+.keras
+.lightning_studio
